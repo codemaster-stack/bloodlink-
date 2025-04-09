@@ -15,7 +15,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/register:
+ * /api/admin/register:
  *   post:
  *     summary: Register a new admin
  *     tags: [Admin]
@@ -46,7 +46,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/login:
+ * /api/admin/login:
  *   post:
  *     summary: Admin login
  *     tags: [Admin]
@@ -75,7 +75,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/forgotPassword:
+ * /api/admin/forgotPassword:
  *   post:
  *     summary: Send password reset email to admin
  *     tags: [Admin]
@@ -100,7 +100,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/resetPassword:
+ * /api/admin/resetPassword:
  *   post:
  *     summary: Reset admin password
  *     tags: [Admin]
@@ -131,7 +131,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/users:
+ * /api/admin/users:
  *   get:
  *     summary: Get all donors and hospitals
  *     tags: [Admin]
@@ -148,7 +148,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/delete/{userId}:
+ * /api/admin/delete/{userId}:
  *   delete:
  *     summary: Delete a user (donor or hospital)
  *     tags: [Admin]
@@ -175,7 +175,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/admin/verify-kyc/{hospitalId}:
+ * /api/admin/verify-kyc/{hospitalId}:
  *   put:
  *     summary: Verify a hospital's KYC
  *     tags: [Admin]
@@ -204,7 +204,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/register:
+ * /api/hospital/register:
  *   post:
  *     summary: Hospital registration
  *     tags: [Hospital]
@@ -235,7 +235,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/login:
+ * /api/hospital/login:
  *   post:
  *     summary: Hospital login
  *     tags: [Hospital]
@@ -264,7 +264,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/search-donors:
+ * /api/hospital/search-donors:
  *   get:
  *     summary: Search for donors (authenticated + KYC)
  *     tags: [Hospital]
@@ -281,7 +281,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/appointment:
+ * /api/hospital/appointment:
  *   post:
  *     summary: Book a donor appointment
  *     tags: [Hospital]
@@ -309,7 +309,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/forgotPassword:
+ * /api/hospital/forgotPassword:
  *   post:
  *     summary: Hospital forgot password
  *     tags: [Hospital]
@@ -333,7 +333,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/resetPassword:
+ * /api/hospital/resetPassword:
  *   post:
  *     summary: Reset hospital password
  *     tags: [Hospital]
@@ -363,7 +363,7 @@
 
 /**
  * @swagger
- * https://bloodlink-2ucr.onrender.com/api/hospital/updateProfile:
+ * /api/hospital/updateProfile:
  *   patch:
  *     summary: Update hospital profile
  *     tags: [Hospital]
