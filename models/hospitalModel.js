@@ -11,7 +11,7 @@ const hospitalSchema = new mongoose.Schema({
   city: { type: String },
   state: { type: String },
   profilePicture: { type: String },
-  kycCompleted: { type: Boolean, default: false } // 🔥 Added
+  kycCompleted: { type: Boolean, default: false } 
 }, { timestamps: true });
 
 module.exports = mongoose.model('hospital', hospitalSchema);

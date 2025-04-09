@@ -4,42 +4,8 @@ const { adminRegister, adminLogin, viewUsers, deleteUser, verifyKYC, forgotPassw
 const  authenticateAdmin  = require("../middleware/authMiddleware");  // Authentication middleware
 
 
-/**
- * @swagger
- * /api/admin/register:
- *   post:
- *     summary: Register a new admin
- *     tags: [Admin]
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required:
- *               - fullName
- *               - email
- *               - role
- *               - password
- *             properties:
- *               fullName:
- *                 type: string
- *               email:
- *                 type: string
- *               role:
- *                 type: string
- *               password:
- *                 type: string
- *     responses:
- *       201:
- *         description: Admin registered successfully
- *       400:
- *         description: Validation error or email exists
- *       500:
- *         description: Internal server error
- */
+// Admin Register (Public route)
 router.post("/register", adminRegister);
-
 
 // Admin Login (Public route)
 router.post("/login", adminLogin);
