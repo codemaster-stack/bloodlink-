@@ -10,13 +10,13 @@ const options = {
     },
     servers: [
       {
-        url: "http://localhost:5000",
+        url: "https://bloodlink-2ucr.onrender.com",
       },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: "http",
+          type: "https",
           scheme: "bearer",
           bearerFormat: "JWT",
         },
