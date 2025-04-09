@@ -38,6 +38,10 @@
  *     responses:
  *       201:
  *         description: Admin created successfully
+ *       400:
+ *         description: Bad request - missing or invalid fields
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -61,6 +65,12 @@
  *     responses:
  *       200:
  *         description: Logged in successfully
+ *       400:
+ *         description: Missing or invalid credentials
+ *       401:
+ *         description: Unauthorized - incorrect email or password
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -82,6 +92,10 @@
  *     responses:
  *       200:
  *         description: Reset link sent
+ *       400:
+ *         description: Invalid email format or missing email
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -107,6 +121,12 @@
  *     responses:
  *       200:
  *         description: Password updated successfully
+ *       400:
+ *         description: Invalid or expired token
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -120,6 +140,10 @@
  *     responses:
  *       200:
  *         description: List of users
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -139,6 +163,14 @@
  *     responses:
  *       200:
  *         description: User deleted successfully
+ *       400:
+ *         description: Invalid user ID
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -158,6 +190,14 @@
  *     responses:
  *       200:
  *         description: KYC approved
+ *       400:
+ *         description: Invalid hospital ID
+ *       401:
+ *         description: Unauthorized access
+ *       404:
+ *         description: Hospital not found
+ *       500:
+ *         description: Internal server error
  */
 
 /** --------------------- HOSPITAL ROUTES --------------------- */
@@ -187,6 +227,10 @@
  *     responses:
  *       201:
  *         description: Hospital registered successfully
+ *       400:
+ *         description: Missing or invalid fields
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -210,6 +254,12 @@
  *     responses:
  *       200:
  *         description: Logged in successfully
+ *       400:
+ *         description: Missing credentials
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -223,6 +273,10 @@
  *     responses:
  *       200:
  *         description: Donors retrieved
+ *       401:
+ *         description: Unauthorized or KYC not completed
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -245,6 +299,12 @@
  *     responses:
  *       200:
  *         description: Appointment booked
+ *       400:
+ *         description: Invalid request data
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -265,6 +325,10 @@
  *     responses:
  *       200:
  *         description: Reset link sent
+ *       400:
+ *         description: Invalid email
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -289,6 +353,12 @@
  *     responses:
  *       200:
  *         description: Password updated
+ *       400:
+ *         description: Invalid token or password
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
  */
 
 /**
@@ -318,4 +388,10 @@
  *     responses:
  *       200:
  *         description: Profile updated
+ *       400:
+ *         description: Invalid input data
+ *       401:
+ *         description: Unauthorized access
+ *       500:
+ *         description: Internal server error
  */
