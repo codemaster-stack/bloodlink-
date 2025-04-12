@@ -4,7 +4,11 @@ const hospitalSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true, unique: true, lowercase: true },
   location: { type: String, required: true },
-  role: { type: String, default: 'hospital' },
+  role: {
+    type: String,
+    enum: ['hospital', 'donor'], // Role can only be 'hospital' for this schema
+    default: 'hospital', // Default value is 'hospital'
+  },
   password: { type: String, required: true },
   phone: { type: String },
   address: { type: String },
