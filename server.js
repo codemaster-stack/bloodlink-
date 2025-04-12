@@ -8,7 +8,7 @@ const authRoutes = require('./routes/authRoutes');
 const donorRoutes = require('./routes/donorRoutes');
 const hospitalRoutes = require('./routes/hospitalRoutes');
 const adminRoutes = require('./routes/adminRoutes');
-const kycRoutes = require
+const kycRoutes = require('./routes/kycRoutes');  // Fixed here
 const fs = require('fs');
 const path = require('path');
 
@@ -18,23 +18,21 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
-
 dotenv.config();
 
 const app = express();
 
 // Middleware
 app.use(express.json());
-app.use(cors());
+app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/donor', donorRoutes);
 app.use('/api/hospital', hospitalRoutes);
 app.use('/api/admin', adminRoutes);
-app.use('/api/kyc', kycRoutes); 
+app.use('/api/kyc', kycRoutes); // Now this line is correct
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)

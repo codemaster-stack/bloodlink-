@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const { submitKYC } = require('../controller/kycController');
-const upload = require('../config/multaConfig'); // Multer middleware
-const { verifyToken } = require('../middleware/authMiddleware'); // Your auth
+const upload = require('../config/multerConfig'); // Multer middleware
+const  verifyToken  = require('../middleware/authMiddleware'); // Your auth
 
 // Upload fields (match the form field names)
 const kycUpload = upload.fields([
@@ -12,6 +12,6 @@ const kycUpload = upload.fields([
 ]);
 
 // POST /api/kyc/submit
-router.post('/submit',  submitKYC);
+router.post('/submit', verifyToken, kycUpload, submitKYC);
 
-module.exports = router;
+module.exports = router;  // Ensure this is included!

@@ -4,8 +4,9 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken"); 
 const { resetMail } = require("../utils/resetMail"); 
 const { sendEmail } = require("../utils/sendEmail");
+const email  = require("../utils/email");
 require("dotenv").config(); 
-const Appointment = require("../models/appointmentModel");
+const BloodRequest = require('../models/bloodRequestModel');
 const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
@@ -42,7 +43,7 @@ exports.register =async (req, res) => {
       fullName: fullName.trim(),
       email: emailNormalized,
       location: location.trim(),
-      role: role.trim(),
+      role: role.trim().toLowerCase(),
       password: hashedPassword,
     });
 
@@ -60,100 +61,141 @@ exports.register =async (req, res) => {
   }
 };
 
-  exports.login = async (req, res)=>{
-    try{
-      const {email, password} = req.body;
-      if(email == undefined || password == undefined){
-        return res.status(400).json({
-          message: 'Email and password required'
-        })
-      }
-  
-    const hospital = await hospitalModel.findOne({email: email.toLowerCase() });
-    if(hospital == null){
-      return res.status(404).json({
-        message: 'Hospital Not Found'
-      })
+exports.login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password required' });
     }
-    const isPasswordCorrect = await bcrypt.compare(password, hospital.password)
-    if(isPasswordCorrect == false){
-      return res.status(400).json({
-        message: 'Incorrect Password'
-      })
+
+    const hospital = await hospitalModel.findOne({ email: email.toLowerCase() });
+    if (!hospital) {
+      return res.status(404).json({ message: 'Hospital Not Found' });
     }
-    const token = jwt.sign({ id: hospital._id }, process.env.JWT_SECRET, {
-          expiresIn: '1d'
-        });
+
+    const isPasswordCorrect = await bcrypt.compare(password, hospital.password);
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ message: 'Incorrect Password' });
+    }
+
+    //  Ensure role is saved correctly
+    if (hospital.role.toLowerCase() !== 'hospital') {
+      await hospitalModel.updateOne(
+        { email: hospital.email },
+        { $set: { role: 'hospital' } }
+      );
+      hospital.role = 'hospital'; // Also update the local object
+    }
+
+    console.log('Hospital Role:', hospital.role);
+
+    const token = jwt.sign(
+      { id: hospital._id, role: hospital.role }, // Now guaranteed to be lowercase
+      process.env.JWT_SECRET,
+      { expiresIn: '1d' }
+    );
+
     res.status(200).json({
       message: 'Logged In Successfully',
       data: hospital,
       token
-    })
-    }catch(error){
-      console.log(error.message)
-      res.status(500).json({
-        message: 'Internal Server Error '+ error.message
-      })
-    }
-  }
+    });
 
-exports.searchForDonors = async (req, res) => {
-  try {
-    if (req.user.role !== 'HOSPITAL') {
-      return res.status(403).json({ message: 'Access denied. Only hospitals can search for donors.' });
-    }
-    if (!req.user.isKYCVerified) {
-      return res.status(400).json({ message: 'You are yet to complete your KYC, check your email and complete it.' });
-    }
-    
-    const donors = await donorModel.find(); // Assuming donor data exists
-    res.status(200).json(donors);
-  } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({
+      message: 'Internal Server Error ' + error.message
+    });
   }
 };
 
-exports.bookAppointment = async (req, res) => {
-  const { hospitalId, date, time } = req.body;
-  
-  try {
-    const appointment = new Appointment({
-      donor: req.user.id,
-      hospital: hospitalId,
-      date,
-      time,
-    });
-    await appointment.save();
-    // Send email notification to the hospital
-        sendEmail(
-          'hospital-email@example.com',
-          'Appointment Request',
-          `A donor wants to book an appointment with you. Please log into the Lifelink app to read, add, confirm, or reschedule.`
-        );
-    
-        res.status(200).json({ message: 'Appointment booked successfully' });
-      } catch (err) {
-        res.status(500).json({ message: 'Error booking appointment' });
-      }
-    };
 
-exports.viewAppointments = async (req, res) => {
-  try {
-    const appointments = await Appointment.find({ hospital: req.user.id }).populate('donor', 'fullName email');
-    res.status(200).json(appointments);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching appointments' });
-  }
-}
-exports.viewDonorProfile = async (req, res) => {
-  try {
-    const donor = await donorModel.findById(req.params.donorId);
-    if (!donor) {
-      return res.status(404).json({ message: 'Donor not found' });
+  exports.searchForDonors = async (req, res) => {
+    try {
+      console.log(req.user);  // Debugging line to see the user data
+  
+      if (req.user.role !== 'hospital') {
+        return res.status(403).json({ message: 'Access denied. Only hospitals can search for donors.' });
+      }
+  
+      if (!req.user.isKycVerified) {
+        return res.status(400).json({ message: 'You are yet to complete your KYC, check your email and complete it.' });
+      }
+  
+      const donors = await donorModel.find();
+      res.status(200).json(donors);
+    } catch (err) {
+      res.status(500).json({ message: 'Server error', error: err.message });
     }
-    res.status(200).json(donor);
-  } catch (err) {
-    res.status(500).json({ message: 'Error fetching donor profile' });
+  };
+  
+  exports.submitBloodRequest = async (req, res) => { 
+    try {
+      const { bloodGroup, numberOfPints, preferredDate, urgencyLevel, amount } = req.body;
+  
+      if (req.user.role !== 'hospital') {
+        return res.status(403).json({ message: 'Only hospitals can make a blood request' });
+      }
+      console.log('Amount from body:', amount);
+      const request = new BloodRequest({
+        hospital: req.user.id,  // Referring to the hospital
+        bloodGroup,
+        numberOfPints,
+        preferredDate,
+        urgencyLevel,
+        amount,  // Correct field to match schema
+      });
+  
+      await request.save();
+  
+      res.status(201).json({ message: 'Blood request submitted successfully', request });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error', error: error.message });
+    }
+  };
+  
+  exports.getBloodRequestHistory = async (req, res) => {
+    try {
+      // Ensure the user is a hospital
+      if (req.user.role !== 'hospital') {
+        return res.status(403).json({ message: 'Only hospitals can view their blood request history' });
+      }
+  
+      // Fetch the hospital's blood request history
+      const requests = await BloodRequest.find({ hospital: req.user.id })
+        .sort({ createdAt: -1 })
+          // Sort by date, most recent first
+        .select('bloodGroup numberOfPints preferredDate urgencyLevel amount status createdAt updatedAt'); // Explicitly select fields
+  
+      console.log('Fetched requests:', requests);
+      if (requests.length === 0) {
+        return res.status(404).json({ message: 'No blood requests found for this hospital.' });
+      }
+  
+      res.status(200).json({ requests });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: 'Server error, please try again later.' });
+    }
+  };
+
+exports.getHospitalProfile = async (req, res) => {
+  try {
+    console.log("hospital Role:", req.user.role);
+    console.log("req.user:", req.user);
+
+    const hospital = await hospitalModel.findById(req.user.id).select('-password'); // omit password if present
+
+    if (!hospital) {
+      return res.status(404).json({ message: 'Hospital not found' });
+    }
+
+    res.status(200).json({ hospital });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error, please try again later.' });
   }
 };
 

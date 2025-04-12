@@ -5,16 +5,16 @@ const kycSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Hospital',
     required: true,
-    unique: true
   },
   facilityImage: String,
   accreditedCertificate: String,
   licenseNumber: String,
   utilityBill: String,
-  isVerified: {
-    type: Boolean,
-    default: false
-  }
+  status: {
+    type: String,
+    enum: ['pending', 'approved', 'declined'],
+    default: 'pending',
+  },
 }, { timestamps: true });
 
 module.exports = mongoose.model('KYC', kycSchema);
