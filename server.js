@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const swaggerUi = require("swagger-ui-express");
-const setupSwaggerDocs = require("./swagger");
+const swaggerSpec = require("./swaggerSpec");
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const authRoutes = require('./routes/authRoutes');
@@ -36,7 +36,7 @@ app.use('/api/hospital', hospitalRoutes);
 app.use('/api/admin', adminRoutes);
 
 app.use('/api/kyc', kycRoutes); // Now this line is correct
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(setupSwaggerDocs));
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec)); 
 
 // MongoDB connection
 mongoose.connect(process.env.MONGO_URI)
