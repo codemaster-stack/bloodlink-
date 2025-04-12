@@ -494,7 +494,7 @@
 
 /**
  * @swagger
- * /api/hospital/submit:
+ * /api/kyc/submit:
  *   post:
  *     summary: Submit KYC
  *     tags: [Hospital]
