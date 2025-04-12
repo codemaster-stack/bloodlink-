@@ -1,41 +1,36 @@
-const swaggerJSDoc = require("swagger-jsdoc"); 
-const swaggerUi = require('swagger-ui-express');
+const swaggerJSDoc = require("swagger-jsdoc");
 
 const options = {
   definition: {
-    openapi: "3.0.0", // OpenAPI version
+    openapi: "3.0.0", //  Make sure this is spelled correctly and is at this level
     info: {
-      title: "LifeLink API", // Your API title
-      version: "1.0.0", // Your API version
-      description: "API for LifeLink Blood Donation Platform", // Your API description
+      title: "LifeLink API",
+      version: "1.0.0",
+      description: "API for LifeLink Blood Donation Platform",
     },
     servers: [
       {
-        url: "https://bloodlink-2ucr.onrender.com", // Base URL of your API
+        url: "https://bloodlink-2ucr.onrender.com",
       },
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: "http", // Should be 'http' for Bearer auth
+          type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT", // JWT format
+          bearerFormat: "JWT",
         },
       },
     },
     security: [
       {
-        bearerAuth: [], // Security requirement for API routes
+        bearerAuth: [],
       },
     ],
   },
-  apis: ["./swaggerDoc.js"], // File containing annotations for API routes (if any)
+  apis: ["./swaggerDoc.js"], // Or "./routes/*.js" if you're using JSDoc in routes
 };
 
 const swaggerSpec = swaggerJSDoc(options);
 
-const setupSwaggerDocs = (app) => {
-  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec)); // Use the Swagger UI
-};
-
-module.exports = setupSwaggerDocs;
+module.exports = swaggerSpec; //  Export the spec directly
