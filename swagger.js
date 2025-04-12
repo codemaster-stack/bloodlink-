@@ -28,7 +28,6 @@ const options = {
       },
     ],
   },
-  apis: ['./routes/*.js', './docs/*.yaml'],
   apis: ["./swaggerDoc.js"], // You can add './routes/*.js' here too if needed
 };
 
