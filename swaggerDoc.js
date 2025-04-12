@@ -404,7 +404,7 @@
 /**
  * @swagger
  * /api/hospital/updateProfile:
- *   put:
+ *   patch:
  *     summary: Update hospital profile
  *     tags: [Hospital]
  *     security:
