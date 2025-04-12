@@ -25,12 +25,16 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get('/', (req, res) => {
+  res.send('Server is running');
+});
 
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/donor', donorRoutes);
 app.use('/api/hospital', hospitalRoutes);
 app.use('/api/admin', adminRoutes);
+
 app.use('/api/kyc', kycRoutes); // Now this line is correct
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(setupSwaggerDocs));
 
